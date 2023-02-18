@@ -1,0 +1,57 @@
+<div class="container-fluid card" style="width: 70rem">
+  <div class="card-body">
+    <h5 class="card-title">File Information</h5>
+    <div class="card-text">
+      <div class="form-group">
+        <label>File Id : &nbsp;</label><span>{{ fileId }}</span>
+      </div>
+      <div class="form-group">
+        <label>File Name : &nbsp;</label><span>{{ fileName }}</span>
+      </div>
+      <div class="form-group">
+        <label>File Status : &nbsp;</label><span>{{ fileStatus }}</span>
+      </div>
+    </div>
+    <span>
+      <button class="btn btn-primary" (click)="goBackToPrevPage()">Back</button>&nbsp;
+    </span>
+    <span>
+      <button class="btn btn-primary" (click)="onDataRefresh()">Refresh</button>&nbsp;
+    </span>
+    <span *ngIf="fileStatus === 'File Validation Failed' || fileStatus === 'Report Generation Failed'">
+      <button class="btn btn-primary" (click)="completeUserTask('Retry')">Retry</button>&nbsp;
+    </span>
+    <span *ngIf="fileStatus === 'File Validation Successful'">
+      <button class="btn btn-primary" (click)="completeUserTask('Generate Report')">Generate Report</button>&nbsp;
+    </span>
+    <span *ngIf="fileStatus === 'Report Generation Successful'">
+      <button class="btn btn-primary" (click)="completeUserTask('Complete')">Complete Process</button>&nbsp;
+    </span>
+  </div>
+
+  <p>
+    <button style="width: 500px" type="button" 
+      class="btn btn-outline-primary" 
+      (click)="collapse.toggle()"
+      [attr.aria-expanded]="!isCollapsed"
+      aria-controls="collapseExample">
+      Process Information
+    </button>    
+  </p>
+  <div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed">
+    <div class="card" style="margin-bottom: 10px;">
+      <div class="card-body">
+        <ag-grid-angular
+              style="height: 400px"
+              rowSelection="multiple"
+              class="ag-theme-balham"
+              [rowData]="rowData"
+              [columnDefs]="columnDefs"
+              [defaultColDef]="defaultColDef"
+              [suppressMenuHide]="true"
+              (gridReady)="onGridReady($event)">
+            </ag-grid-angular>
+      </div>
+    </div>
+  </div>
+</div>
